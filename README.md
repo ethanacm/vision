@@ -13,8 +13,10 @@ It is currently using [SimpleCV](http://simplecv.org/) with Python as a start.
 # Setting up
 
 1. Download and install [SimpleCV](http://simplecv.org/download/).
-2. ???
+2. Run `hello_world.py` (make sure you're using Python 2)
+3. Smile and wave at the camera!
 
+If everything worked well, you now have SimpleCV installed and are ready to do some computer vision engineering!
 
 # Contributing 
 
