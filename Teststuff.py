@@ -18,12 +18,12 @@ def taxidistance(a,b):
 def sortfunc(a):
 	return a[0]
 
-print glob.glob(sys.argv[1]) #print the list of files to run on.
+print(glob.glob(sys.argv[1])) #print the list of files to run on.
 
 #UNUSED FUNCTION, created in an early attempt to find the grid. It should remove lines that do not share points with other lines. Might have broken since then.
 def filterLinesToNowhere(iterations,lines):
 	for dummy in range(0,iterations):
-		print len(lines)
+		print(len(lines))
 		i=0
 		j=0
 		while i<len(lines):
@@ -43,7 +43,7 @@ def filterLinesToNowhere(iterations,lines):
 				i+=1
 		i=0
 		j=0
-		print len(lines)
+		print(len(lines))
 		while i<len(lines):
 			j=0
 			count=0
@@ -145,7 +145,7 @@ def findExtendedLines(cornerpoints,searchlength,minlength,searchdistance,maxdist
 
 #Main loop. Loops through filenames given.
 for filename in glob.glob(sys.argv[1]):
-	print filename
+	print(filename)
 	
 	try: #Hey, at least there is some error handling.
 		img=cv2.imread(filename) #Read the image
@@ -185,7 +185,7 @@ for filename in glob.glob(sys.argv[1]):
 	img[harris>0.01*harris.max()]=[0,0,255] #also onto the starting image so I can see it.
 
 	#Then, I run findContours, which was the easiest (probably not best) way to turn small corner blobs into polygons with coordinates.
-	contours,hierarchy=cv2.findContours(binary,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+	dump,contours,hierarchy=cv2.findContours(binary,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
 	cv2.drawContours(img,contours,-1,(0,255,0), 3) #And I draw them too!
 	
 	#This converts polygons into a point at their center of mass, and adds the point to a master list.
@@ -200,7 +200,7 @@ for filename in glob.glob(sys.argv[1]):
 
 	cornerpoints.sort(key=operator.itemgetter(0,1)) #Sort by x,y. This makes future operations way faster. Trust me.
 
-	print len(cornerpoints) #Good to give some output.
+	print(len(cornerpoints)) #Good to give some output.
 
 	cornerpoints=combineSimilarPoints(cornerpoints,30) #Combine nearby points
 
@@ -326,15 +326,15 @@ for filename in glob.glob(sys.argv[1]):
 					finalsquares.append(set(square)) #Add it to the list of squares
 
 	#Unused test code for an opencv function for features. Found too many roomba corners, not grid corners.
-	corners=cv2.goodFeaturesToTrack(ret,70,0.75,10)
-	corners = np.int0(corners)
-	for i in corners:
-		x,y=i.ravel()
-		cv2.circle(outimg,(x,y),7,255,3)
+	#corners=cv2.goodFeaturesToTrack(ret,70,0.75,10)
+	#corners = np.int0(corners)
+	#for i in corners:
+	#	x,y=i.ravel()
+	#	cv2.circle(outimg,(x,y),7,255,3)
 
 	
-	print len(squares) #Debug print
-	print len(finalsquares) #Should be smaller than the 
+	print(len(squares)) #Debug print
+	print(len(finalsquares)) #Should be smaller than the 
 
 	lines.sort(key=operator.itemgetter(2))
 	#These draw all the lines, and finallines found
@@ -365,11 +365,13 @@ for filename in glob.glob(sys.argv[1]):
 		point=cornerpoints[a]
 		cv2.circle(img,(int(point[0]),int(point[1])),7,(0,0,255),3)
 		cv2.circle(outimg2,(int(point[0]),int(point[1])),7,(0,0,255),3)
-
-	cv2.imshow('Threshold?',ret) #Draw the threshold image
-	cv2.imshow('Corners?',binary) #Draw the harris result image
-	cv2.imshow('image',img)
+	try:
+		cv2.imshow('Threshold?',ret) #Draw the threshold image
+		cv2.imshow('Corners?',binary) #Draw the harris result image
+		cv2.imshow('image',img)
 	#cv2.imshow('lines and such',outimg2)
 	#cv2.imshow('GoodFeaturesToTrack',outimg)
-	cv2.waitKey(0)
-	cv2.destroyAllWindows()
+		cv2.waitKey(0)
+		cv2.destroyAllWindows()
+	except:
+		continue
