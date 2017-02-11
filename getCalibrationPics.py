@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 import os
 
-camera=cv2.VideoCapture(1)
+camera=cv2.VideoCapture(1) #Camera number
 write=False
 nums=0
 os.chdir("ChessBoardPics")
